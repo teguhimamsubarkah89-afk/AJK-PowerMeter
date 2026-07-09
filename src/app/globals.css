@@ -1,0 +1,702 @@
+/* ============================================================
+   Global Styles — AJK PowerMeter Dashboard
+   Design system terinspirasi warna logo AJK (merah, kuning, hijau)
+   Dark mode sebagai default
+   ============================================================ */
+
+@import "tailwindcss";
+
+/* ── CSS Custom Properties ──────────────────────────────────── */
+:root {
+  /* Brand Colors (dari logo AJK) */
+  --ajk-red: #DC2626;
+  --ajk-yellow: #F59E0B;
+  --ajk-green: #16A34A;
+
+  /* Neutral */
+  --bg-primary: #0a0e1a;
+  --bg-secondary: #111827;
+  --bg-card: #1a1f33;
+  --bg-card-hover: #222842;
+  --bg-sidebar: #0d1225;
+  --bg-input: #1e2438;
+
+  /* Text */
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+
+  /* Borders */
+  --border-color: #1e293b;
+  --border-hover: #334155;
+
+  /* Accent Colors (untuk metric cards) */
+  --color-amber: #f59e0b;
+  --color-blue: #3b82f6;
+  --color-emerald: #10b981;
+  --color-violet: #8b5cf6;
+  --color-cyan: #06b6d4;
+  --color-orange: #f97316;
+
+  /* Glassmorphism */
+  --glass-bg: rgba(17, 24, 39, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+
+  /* Spacing */
+  --sidebar-width: 260px;
+  --sidebar-collapsed-width: 72px;
+  --topbar-height: 60px;
+
+  /* RGB variants for rgba() usage */
+  --bg-primary-rgb: 10,14,26; /* #0a0e1a */
+  --bg-secondary-rgb: 17,24,39; /* #111827 */
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Light mode overrides */
+.light {
+  --bg-primary: #f8fafc;
+  --bg-secondary: #ffffff;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f1f5f9;
+  --bg-sidebar: #ffffff;
+  --bg-input: #f1f5f9;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  --border-color: #e2e8f0;
+  --border-hover: #cbd5e1;
+  --glass-bg: rgba(255, 255, 255, 0.8);
+  --glass-border: rgba(0, 0, 0, 0.06);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  /* RGB variants for light theme */
+  --bg-primary-rgb: 248,250,252; /* #f8fafc */
+  --bg-secondary-rgb: 255,255,255; /* #ffffff */
+}
+
+/* ── Base Styles ────────────────────────────────────────────── */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* ── Scrollbar Custom ───────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--text-muted);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* ── Animations ─────────────────────────────────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.8);
+  }
+}
+
+@keyframes pulseDot {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.5);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes countUp {
+  from { opacity: 0.5; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Animation Utility Classes ──────────────────────────────── */
+.animate-fade-in {
+  animation: fadeIn var(--transition-normal) ease-out forwards;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp var(--transition-slow) ease-out forwards;
+}
+
+.animate-fade-in-down {
+  animation: fadeInDown var(--transition-normal) ease-out forwards;
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft var(--transition-slow) ease-out forwards;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight var(--transition-slow) ease-out forwards;
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+.animate-pulse-dot {
+  animation: pulseDot 2s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent 25%, rgba(255,255,255,0.05) 50%, transparent 75%);
+  background-size: 200% 100%;
+  animation: shimmer 2s linear infinite;
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradientShift 8s ease infinite;
+}
+
+.animate-count-up {
+  animation: countUp 0.3s ease-out;
+}
+
+/* ── Staggered Card Entrance ────────────────────────────────── */
+.stagger-1 { animation-delay: 0ms; }
+.stagger-2 { animation-delay: 80ms; }
+.stagger-3 { animation-delay: 160ms; }
+.stagger-4 { animation-delay: 240ms; }
+.stagger-5 { animation-delay: 320ms; }
+.stagger-6 { animation-delay: 400ms; }
+
+/* ── Glassmorphism ──────────────────────────────────────────── */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+.glass-thick {
+  background: var(--glass-bg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+/* ── Gradient Borders ───────────────────────────────────────── */
+.gradient-border {
+  position: relative;
+}
+
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, var(--ajk-red), var(--ajk-yellow), var(--ajk-green));
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: xor;
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+}
+
+.gradient-border:hover::before {
+  opacity: 1;
+}
+
+/* ── Metric Card Glow Effects ───────────────────────────────── */
+.glow-amber { box-shadow: 0 0 20px rgba(245, 158, 11, 0.15), inset 0 1px 0 rgba(245, 158, 11, 0.1); }
+.glow-blue { box-shadow: 0 0 20px rgba(59, 130, 246, 0.15), inset 0 1px 0 rgba(59, 130, 246, 0.1); }
+.glow-emerald { box-shadow: 0 0 20px rgba(16, 185, 129, 0.15), inset 0 1px 0 rgba(16, 185, 129, 0.1); }
+.glow-violet { box-shadow: 0 0 20px rgba(139, 92, 246, 0.15), inset 0 1px 0 rgba(139, 92, 246, 0.1); }
+.glow-cyan { box-shadow: 0 0 20px rgba(6, 182, 212, 0.15), inset 0 1px 0 rgba(6, 182, 212, 0.1); }
+.glow-orange { box-shadow: 0 0 20px rgba(249, 115, 22, 0.15), inset 0 1px 0 rgba(249, 115, 22, 0.1); }
+
+/* ── Hover Effects ──────────────────────────────────────────── */
+.hover-lift {
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px) scale(1.01);
+}
+
+/* ── Background Pattern ─────────────────────────────────────── */
+.bg-grid-pattern {
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.bg-gradient-radial {
+  background: radial-gradient(ellipse at top, rgba(59, 130, 246, 0.08) 0%, transparent 60%),
+              radial-gradient(ellipse at bottom right, rgba(139, 92, 246, 0.05) 0%, transparent 60%);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   LOGIN PAGE STYLES
+   ══════════════════════════════════════════════════════════════ */
+
+.login-page {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 24px 16px;
+}
+
+.login-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(-45deg, #0a0e1a, #1a0a2e, #0a1628, #0d1225);
+  background-size: 400% 400%;
+  animation: gradientShift 12s ease infinite;
+}
+
+.login-grid-overlay {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+  background-size: 48px 48px;
+  opacity: 0.5;
+}
+
+.login-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  pointer-events: none;
+}
+
+.login-orb--blue {
+  top: -15%;
+  left: -5%;
+  width: 500px;
+  height: 500px;
+  background: rgba(59, 130, 246, 0.12);
+}
+
+.login-orb--violet {
+  bottom: -15%;
+  right: -5%;
+  width: 500px;
+  height: 500px;
+  background: rgba(139, 92, 246, 0.12);
+}
+
+.login-orb--emerald {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  height: 300px;
+  background: rgba(16, 185, 129, 0.05);
+}
+
+.login-container {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 440px;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.login-brand {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.login-logo-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 20px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  margin-bottom: 16px;
+  animation: float 3s ease-in-out infinite;
+}
+
+.login-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.5px;
+  margin-bottom: 4px;
+}
+
+.login-subtitle {
+  font-size: 14px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.login-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--glass-border);
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.03),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  border-radius: 24px;
+  padding: 36px 32px;
+}
+
+.login-card-header {
+  margin-bottom: 28px;
+}
+
+.login-card-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+
+.login-card-desc {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.login-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.login-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  letter-spacing: 0.3px;
+}
+
+.login-input-wrapper {
+  position: relative;
+}
+
+.login-input-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.login-input {
+  width: 100%;
+  padding: 14px 16px 14px 46px;
+  border-radius: 14px;
+  background: var(--bg-input);
+  border: 1.5px solid var(--border-color);
+  color: var(--text-primary);
+  font-size: 14px;
+  line-height: 1.5;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.login-input::placeholder {
+  color: var(--text-muted);
+}
+
+.login-input:focus {
+  border-color: rgba(59, 130, 246, 0.5);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.login-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.login-input--password {
+  padding-right: 46px;
+}
+
+.login-toggle-password {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  transition: color 0.2s;
+}
+
+.login-toggle-password:hover {
+  color: var(--text-secondary);
+}
+
+.login-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 15px 20px;
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 700;
+  color: white;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
+  margin-top: 4px;
+}
+
+.login-submit:hover:not(:disabled) {
+  background: linear-gradient(135deg, #60a5fa, #3b82f6);
+  box-shadow: 0 6px 30px rgba(59, 130, 246, 0.4);
+  transform: translateY(-1px);
+}
+
+.login-submit:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.login-submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.login-footer {
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 28px;
+}
+
+/* Login responsive */
+@media (max-width: 480px) {
+  .login-card {
+    padding: 28px 20px;
+    border-radius: 20px;
+  }
+  .login-title {
+    font-size: 24px;
+  }
+  .login-logo-wrapper {
+    width: 64px;
+    height: 64px;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   DASHBOARD LAYOUT STYLES
+   ══════════════════════════════════════════════════════════════ */
+
+/* Ensure main content never goes under sidebar/topbar */
+.dashboard-main {
+  padding-top: var(--topbar-height);
+  min-height: 100vh;
+  transition: padding-left 0.3s ease;
+}
+
+@media (min-width: 1024px) {
+  .dashboard-main--expanded {
+    padding-left: var(--sidebar-width);
+  }
+  .dashboard-main--collapsed {
+    padding-left: var(--sidebar-collapsed-width);
+  }
+}
+
+.dashboard-content {
+  padding: 20px 16px;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .dashboard-content {
+    padding: 24px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .dashboard-content {
+    padding: 28px 32px;
+  }
+}
+
+/* ── Recharts Custom Styles ─────────────────────────────────── */
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  stroke: var(--border-color);
+  stroke-opacity: 0.5;
+}
+
+.recharts-text {
+  fill: var(--text-muted);
+  font-size: 12px;
+}
+
+.recharts-tooltip-wrapper {
+  outline: none !important;
+}
+
+/* Metric value responsive sizing and truncate safety */
+.metric-value {
+  font-size: clamp(1.4rem, 4.5vw, 2.2rem);
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+}
+
+/* Ensure grid children can shrink and text truncate properly */
+.min-w-0 {
+  min-width: 0;
+}
+
+/* ── Date Picker Overrides ──────────────────────────────────── */
+.rdp {
+  --rdp-accent-color: var(--color-blue);
+  --rdp-background-color: var(--bg-card);
+}

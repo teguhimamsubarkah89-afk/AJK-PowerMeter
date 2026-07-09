@@ -1,0 +1,17 @@
+# Vercel ignore rules
+node_modules/
+.env.local
+.env.*.local
+.vscode/
+*.log
+.DS_Store
+coverage/
+dist/
+build/
+**/.cache
+
+# Ignore local-only scripts
+scripts/
+
+# Keep repo clean
+*.tgz
