@@ -38,15 +38,15 @@
   --color-cyan: #06b6d4;
   --color-orange: #f97316;
 
-  /* Glassmorphism */
-  --glass-bg: rgba(17, 24, 39, 0.7);
-  --glass-border: rgba(255, 255, 255, 0.08);
-  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  /* Glassmorphism Premium */
+  --glass-bg: rgba(17, 24, 39, 0.45);
+  --glass-border: rgba(255, 255, 255, 0.05);
+  --glass-shadow: 0 10px 40px -10px rgba(0,0,0,0.5);
 
   /* Spacing */
-  --sidebar-width: 260px;
-  --sidebar-collapsed-width: 72px;
-  --topbar-height: 60px;
+  --sidebar-width: 280px;
+  --sidebar-collapsed-width: 80px;
+  --topbar-height: 72px;
 
   /* RGB variants for rgba() usage */
   --bg-primary-rgb: 10,14,26; /* #0a0e1a */
@@ -54,30 +54,12 @@
 
   /* Transitions */
   --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Light mode overrides */
-.light {
-  --bg-primary: #f8fafc;
-  --bg-secondary: #ffffff;
-  --bg-card: #ffffff;
-  --bg-card-hover: #f1f5f9;
-  --bg-sidebar: #ffffff;
-  --bg-input: #f1f5f9;
-  --text-primary: #0f172a;
-  --text-secondary: #475569;
-  --text-muted: #94a3b8;
-  --border-color: #e2e8f0;
-  --border-hover: #cbd5e1;
-  --glass-bg: rgba(255, 255, 255, 0.8);
-  --glass-border: rgba(0, 0, 0, 0.06);
-  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-  /* RGB variants for light theme */
-  --bg-primary-rgb: 248,250,252; /* #f8fafc */
-  --bg-secondary-rgb: 255,255,255; /* #ffffff */
-}
+/* Light mode removed to enforce premium Dark Mode layout */
+
 
 /* ── Base Styles ────────────────────────────────────────────── */
 * {
@@ -94,6 +76,9 @@ html {
 
 body {
   background-color: var(--bg-primary);
+  background-image: 
+    radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.05), transparent 25%),
+    radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.05), transparent 25%);
   color: var(--text-primary);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   min-height: 100vh;
@@ -283,23 +268,24 @@ body {
 /* ── Glassmorphism ──────────────────────────────────────────── */
 .glass {
   background: var(--glass-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow);
 }
 
 .glass-thick {
-  background: var(--glass-bg);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid var(--glass-border);
-  box-shadow: var(--glass-shadow);
+  background: rgba(17, 24, 39, 0.85);
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
 }
 
 /* ── Gradient Borders ───────────────────────────────────────── */
 .gradient-border {
   position: relative;
+  border-radius: 24px;
 }
 
 .gradient-border::before {
@@ -632,11 +618,12 @@ body {
    DASHBOARD LAYOUT STYLES
    ══════════════════════════════════════════════════════════════ */
 
-/* Ensure main content never goes under sidebar/topbar */
 .dashboard-main {
   padding-top: var(--topbar-height);
   min-height: 100vh;
-  transition: padding-left 0.3s ease;
+  transition: padding-left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  z-index: 10;
 }
 
 @media (min-width: 1024px) {

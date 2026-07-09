@@ -69,17 +69,22 @@ export function MetricCard({
 
   return (
     <div
-      className={`glass gradient-border rounded-2xl p-5 hover-lift opacity-0 animate-fade-in-up stagger-${staggerIndex + 1} min-w-0`}
+      className={`glass-thick gradient-border p-6 hover-lift animate-fade-in-up stagger-${staggerIndex + 1} min-w-0 relative overflow-hidden group`}
       style={{
         animationFillMode: 'forwards',
-        boxShadow: `0 0 20px ${accentColor}15, inset 0 1px 0 ${accentColor}10`,
       }}
       role="group"
       aria-label={`${label} metric card`}
     >
+      {/* Background Glow */}
+      <div 
+        className="absolute -inset-1 opacity-20 group-hover:opacity-40 blur-2xl transition-opacity duration-500 pointer-events-none"
+        style={{ background: `radial-gradient(circle at 50% 0%, ${accentColor}, transparent 70%)` }}
+      />
+
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
-        <span className="text-[13px] font-semibold text-[var(--text-secondary)] tracking-wide">
+      <div className="flex items-center justify-between mb-5 relative z-10">
+        <span className="text-xs font-bold text-[var(--text-muted)] tracking-widest uppercase">
           {label}
         </span>
         <div
@@ -91,28 +96,30 @@ export function MetricCard({
       </div>
 
       {/* Value */}
-      <div className="flex items-baseline gap-1.5 mb-2">
+      <div className="flex items-baseline gap-2 mb-3 relative z-10">
         <span
-          className={`metric-value leading-none text-[var(--text-primary)] tracking-tight tabular-nums ${isAnimating ? 'animate-count-up' : ''}`}
+          className={`text-4xl lg:text-5xl font-black tracking-tighter text-white tabular-nums drop-shadow-md ${isAnimating ? 'animate-count-up' : ''}`}
           aria-live="polite"
         >
           {displayValue}
         </span>
-        <span className="text-sm text-[var(--text-muted)] font-semibold">
+        <span className="text-sm lg:text-base font-bold text-[var(--text-secondary)]">
           {unit}
         </span>
       </div>
 
       {/* Trend */}
-      <div className="flex items-center gap-1.5 text-xs font-medium" style={{ color: trendConfig[trend].color }}>
-        {trendConfig[trend].icon}
-        <span>{trendConfig[trend].label}</span>
+      <div className="flex items-center gap-2 text-xs font-bold relative z-10" style={{ color: trendConfig[trend].color }}>
+        <div className="p-1 rounded-full bg-white/5">
+          {trendConfig[trend].icon}
+        </div>
+        <span className="tracking-wide">{trendConfig[trend].label}</span>
       </div>
 
-      {/* Accent line */}
+      {/* Accent line bottom */}
       <div
-        className="mt-4 h-[2px] rounded-full"
-        style={{ background: `linear-gradient(to right, ${accentColor}50, transparent)` }}
+        className="absolute bottom-0 left-0 right-0 h-[2px] opacity-50 group-hover:opacity-100 transition-opacity"
+        style={{ background: `linear-gradient(90deg, transparent, ${accentColor}, transparent)` }}
       />
     </div>
   );

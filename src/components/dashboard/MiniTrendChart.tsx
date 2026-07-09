@@ -49,7 +49,7 @@ export function MiniTrendChart() {
 
   if (loading) {
     return (
-      <div className="glass rounded-2xl p-4 sm:p-6 animate-fade-in">
+      <div className="glass-thick gradient-border rounded-3xl p-5 sm:p-7 animate-fade-in">
         <div className="flex items-center justify-between mb-4">
           <Skeleton variant="text" width={200} height={20} />
           <Skeleton variant="text" width={120} height={32} />
@@ -60,7 +60,7 @@ export function MiniTrendChart() {
   }
 
   return (
-    <div className="glass rounded-2xl p-4 sm:p-6 animate-fade-in">
+    <div className="glass-thick gradient-border rounded-2xl p-5 sm:p-7 animate-fade-in relative z-0">
       {/* Header */}
       <div className="mb-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
@@ -108,7 +108,7 @@ export function MiniTrendChart() {
                   <stop offset="95%" stopColor={chartColor} stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" strokeOpacity={0.5} />
+              <CartesianGrid vertical={false} stroke="var(--glass-border)" strokeOpacity={0.5} strokeDasharray="4 4" />
               <XAxis
                 dataKey="timeLabel"
                 tick={{ fontSize: 10, fill: 'var(--text-muted)' }}
@@ -122,12 +122,15 @@ export function MiniTrendChart() {
               />
               <Tooltip
                 contentStyle={{
-                  background: 'var(--bg-card)',
-                  border: '1px solid var(--border-color)',
-                  borderRadius: '12px',
+                  background: 'rgba(17, 24, 39, 0.85)',
+                  backdropFilter: 'blur(16px)',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  borderRadius: '16px',
+                  boxShadow: '0 20px 40px -10px rgba(0,0,0,0.5)',
                   fontSize: '12px',
-                  color: 'var(--text-primary)',
-                  padding: '8px 12px',
+                  fontWeight: '600',
+                  color: 'white',
+                  padding: '12px 16px',
                 }}
                 labelFormatter={(label) => `Waktu: ${label}`}
                 formatter={(val) => {

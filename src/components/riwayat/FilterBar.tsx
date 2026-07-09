@@ -42,7 +42,7 @@ export function FilterBar({
   };
 
   return (
-    <div className="glass rounded-2xl p-3 sm:p-4 animate-fade-in">
+    <div className="glass-thick gradient-border rounded-3xl p-3 sm:p-4 animate-fade-in">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         {/* Period Buttons — scrollable on mobile */}
         <div className="flex gap-1.5 overflow-x-auto pb-1 -mx-0.5 px-0.5 scrollbar-hide">

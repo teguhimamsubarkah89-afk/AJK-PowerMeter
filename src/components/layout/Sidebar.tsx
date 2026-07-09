@@ -41,12 +41,12 @@ export function Sidebar() {
 
   return (
     <aside
-      className="fixed top-0 left-0 h-full z-40 hidden lg:flex flex-col border-r border-[var(--border-color)] transition-all duration-300 ease-in-out"
-      style={{ width, background: 'var(--bg-sidebar)' }}
+      className="fixed top-0 left-0 h-full z-40 hidden lg:flex flex-col glass-thick transition-all duration-500 ease-in-out border-none"
+      style={{ width, background: 'rgba(10, 14, 26, 0.6)' }}
     >
       {/* Logo */}
       <div
-        className="flex items-center gap-3 border-b border-[var(--border-color)] flex-shrink-0 px-4"
+        className="flex items-center gap-3 border-b border-[var(--glass-border)] flex-shrink-0 px-4"
         style={{ height: 'var(--topbar-height)', justifyContent: sidebarCollapsed ? 'center' : 'flex-start' }}
       >
         <div className="w-9 h-9 rounded-xl glass flex items-center justify-center flex-shrink-0">
@@ -72,14 +72,15 @@ export function Sidebar() {
               href={item.href}
               onClick={() => setSidebarOpen(false)}
               title={sidebarCollapsed ? item.label : undefined}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 group overflow-hidden"
+              className="flex items-center gap-3 px-3 py-3 rounded-2xl text-sm font-medium transition-all duration-300 group overflow-hidden relative"
               style={{
                 justifyContent: sidebarCollapsed ? 'center' : 'flex-start',
-                background: active ? 'rgba(59, 130, 246, 0.12)' : 'transparent',
+                background: active ? 'linear-gradient(90deg, rgba(59,130,246,0.15) 0%, rgba(59,130,246,0.05) 100%)' : 'transparent',
                 color: active ? '#60a5fa' : 'var(--text-secondary)',
-                border: active ? '1px solid rgba(59, 130, 246, 0.2)' : '1px solid transparent',
+                boxShadow: active ? 'inset 2px 0 0 #3b82f6' : 'none'
               }}
             >
+              <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl pointer-events-none" />
               <Icon className="w-5 h-5 flex-shrink-0" />
               {!sidebarCollapsed && (
                 <span className="truncate">{item.label}</span>
@@ -90,11 +91,11 @@ export function Sidebar() {
       </nav>
 
       {/* Bottom Section */}
-      <div className="border-t border-[var(--border-color)] p-2.5 flex-shrink-0 space-y-1">
+      <div className="border-t border-[var(--glass-border)] p-3 flex-shrink-0 space-y-1">
         {/* Collapse Toggle */}
         <button
           onClick={toggleSidebarCollapsed}
-          className="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm font-medium text-[var(--text-muted)] hover:bg-[var(--bg-card-hover)] hover:text-[var(--text-secondary)] transition-all duration-200"
+          className="flex items-center gap-3 w-full px-3 py-3 rounded-2xl text-sm font-medium text-[var(--text-muted)] hover:bg-white/5 hover:text-[var(--text-secondary)] transition-all duration-300"
           style={{ justifyContent: sidebarCollapsed ? 'center' : 'flex-start' }}
           title={sidebarCollapsed ? 'Perluas sidebar' : 'Perkecil sidebar'}
         >
@@ -106,7 +107,7 @@ export function Sidebar() {
         {/* Logout */}
         <button
           onClick={logout}
-          className="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm font-medium text-red-400/80 hover:bg-red-500/10 hover:text-red-400 transition-all duration-200"
+          className="flex items-center gap-3 w-full px-3 py-3 rounded-2xl text-sm font-medium text-red-400/80 hover:bg-red-500/10 hover:text-red-400 transition-all duration-300"
           style={{ justifyContent: sidebarCollapsed ? 'center' : 'flex-start' }}
           title={sidebarCollapsed ? 'Keluar' : undefined}
         >

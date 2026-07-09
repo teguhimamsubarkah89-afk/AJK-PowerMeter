@@ -45,7 +45,7 @@ export function HistoryChart({ logs, loading }: HistoryChartProps) {
 
   if (loading) {
     return (
-      <div className="glass rounded-2xl p-4 sm:p-6">
+      <div className="glass-thick gradient-border rounded-3xl p-4 sm:p-6">
         <div className="animate-shimmer h-[280px] rounded-xl" style={{ background: 'var(--bg-card-hover)' }} />
       </div>
     );
@@ -54,7 +54,7 @@ export function HistoryChart({ logs, loading }: HistoryChartProps) {
   if (logs.length === 0) return null;
 
   return (
-    <div className="glass rounded-2xl p-4 sm:p-6 animate-fade-in">
+    <div className="glass-thick gradient-border rounded-3xl p-4 sm:p-6 animate-fade-in">
       {/* Header */}
       <div className="mb-4">
         <h3 className="text-base font-semibold text-[var(--text-primary)] mb-3">

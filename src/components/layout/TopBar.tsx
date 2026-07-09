@@ -7,7 +7,7 @@
 
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
-import { Menu, Sun, Moon, User, LogOut, Clock } from 'lucide-react';
+import { Menu, User, LogOut, Clock } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useAppStore } from '@/stores/useAppStore';
 
@@ -21,7 +21,7 @@ const pageTitles: Record<string, string> = {
 export function TopBar() {
   const pathname = usePathname();
   const { user, logout } = useAuth();
-  const { darkMode, toggleDarkMode, setSidebarOpen } = useAppStore();
+  const { sidebarCollapsed, setSidebarOpen } = useAppStore();
   const [currentTime, setCurrentTime] = useState('');
   const [showUserMenu, setShowUserMenu] = useState(false);
 
@@ -46,31 +46,36 @@ export function TopBar() {
     return () => clearInterval(interval);
   }, []);
 
-  // Apply dark/light mode
+  // Enforce dark mode on mount
   useEffect(() => {
-    const html = document.documentElement;
-    if (darkMode) {
-      html.classList.remove('light');
-      html.classList.add('dark');
-    } else {
-      html.classList.remove('dark');
-      html.classList.add('light');
-    }
-  }, [darkMode]);
+    document.documentElement.classList.add('dark');
+    document.documentElement.classList.remove('light');
+  }, []);
 
   const pageTitle = pageTitles[pathname] || 'Dashboard';
 
   return (
     <header
-      className="fixed top-0 left-0 right-0 z-30 border-b border-[var(--border-color)] transition-all duration-300"
+      className="fixed top-0 right-0 z-30 border-b border-[var(--glass-border)] transition-all duration-500 flex flex-col justify-center"
       style={{
+        left: 0,
         height: 'var(--topbar-height)',
-        background: 'rgba(var(--bg-secondary-rgb), 0.75)',
-        backdropFilter: 'blur(16px)',
-        WebkitBackdropFilter: 'blur(16px)',
+        background: 'rgba(10, 14, 26, 0.45)',
+        backdropFilter: 'blur(24px)',
+        WebkitBackdropFilter: 'blur(24px)',
+        paddingLeft: typeof window !== 'undefined' && window.innerWidth >= 1024 
+          ? (sidebarCollapsed ? 'var(--sidebar-collapsed-width)' : 'var(--sidebar-width)') 
+          : 0
       }}
     >
-      <div className="dashboard-content flex items-center justify-between px-4 lg:px-6">
+      <style dangerouslySetInnerHTML={{__html: `
+        @media (min-width: 1024px) {
+          header {
+            padding-left: ${sidebarCollapsed ? 'var(--sidebar-collapsed-width)' : 'var(--sidebar-width)'} !important;
+          }
+        }
+      `}} />
+      <div className="flex items-center justify-between px-4 lg:px-6 w-full max-w-[1600px] mx-auto">
         {/* Left: Hamburger + Title */}
         <div className="flex items-center gap-3 min-w-0">
           <button
@@ -92,14 +97,7 @@ export function TopBar() {
           <span className="font-mono whitespace-nowrap">{currentTime}</span>
         </div>
 
-        {/* Dark Mode Toggle */}
-        <button
-          onClick={toggleDarkMode}
-          className="p-2 rounded-xl text-[var(--text-secondary)] hover:bg-[var(--bg-card)] hover:text-[var(--text-primary)] transition-all duration-200 flex-shrink-0"
-          title={darkMode ? 'Mode Terang' : 'Mode Gelap'}
-        >
-          {darkMode ? <Sun className="w-[18px] h-[18px]" /> : <Moon className="w-[18px] h-[18px]" />}
-        </button>
+
 
         {/* User Menu */}
         <div className="relative">

@@ -23,7 +23,7 @@ export function StatusIndicator({
   const isPzemOk = pzemStatus === 'OK';
 
   return (
-    <div className="glass rounded-2xl p-4 sm:p-5 animate-fade-in">
+    <div className="glass-thick gradient-border rounded-3xl p-4 sm:p-5 animate-fade-in">
       {/* Row 1: Status badges */}
       <div className="flex flex-wrap items-center gap-2 mb-3">
         <Badge variant={isOnline ? 'success' : 'danger'} dot pulse={isOnline} size="md">

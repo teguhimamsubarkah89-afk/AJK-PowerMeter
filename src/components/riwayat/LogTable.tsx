@@ -57,7 +57,7 @@ export function LogTable({ logs, loading }: LogTableProps) {
 
   if (loading) {
     return (
-      <div className="glass rounded-2xl p-4 sm:p-6">
+      <div className="glass-thick rounded-3xl p-4 sm:p-6 gradient-border">
         <div className="animate-shimmer h-[300px] rounded-xl" style={{ background: 'var(--bg-card-hover)' }} />
       </div>
     );
@@ -65,7 +65,7 @@ export function LogTable({ logs, loading }: LogTableProps) {
 
   if (logs.length === 0) {
     return (
-      <div className="glass rounded-2xl p-6">
+      <div className="glass-thick rounded-3xl p-6 gradient-border">
         <div className="flex flex-col items-center justify-center py-12 text-[var(--text-muted)]">
           <Database className="w-12 h-12 mb-3 opacity-30" />
           <p className="text-sm">Belum ada data log untuk periode ini.</p>
@@ -75,12 +75,12 @@ export function LogTable({ logs, loading }: LogTableProps) {
   }
 
   return (
-    <div className="glass rounded-2xl overflow-hidden">
+    <div className="glass-thick gradient-border rounded-3xl overflow-hidden p-1">
       {/* Table wrapper — scrollable on mobile */}
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto rounded-2xl bg-[#0a0e1a]/40">
         <table className="w-full text-sm" style={{ minWidth: '600px' }}>
           <thead>
-            <tr className="border-b border-[var(--border-color)]">
+            <tr className="border-b border-[var(--glass-border)]">
               {columns.map((col) => (
                 <th
                   key={col.key}
@@ -100,10 +100,10 @@ export function LogTable({ logs, loading }: LogTableProps) {
             {paginatedLogs.map((log, index) => (
               <tr
                 key={log.key}
-                className="border-b border-[var(--border-color)] transition-colors"
-                style={{ background: index % 2 === 1 ? 'rgba(255,255,255,0.02)' : 'transparent' }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-card-hover)'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = index % 2 === 1 ? 'rgba(255,255,255,0.02)' : 'transparent'; }}
+                className="border-b border-[var(--glass-border)] transition-colors"
+                style={{ background: index % 2 === 1 ? 'rgba(255,255,255,0.015)' : 'transparent' }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = index % 2 === 1 ? 'rgba(255,255,255,0.015)' : 'transparent'; }}
               >
                 {columns.map((col) => (
                   <td
@@ -122,7 +122,7 @@ export function LogTable({ logs, loading }: LogTableProps) {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-between px-3 sm:px-4 py-3 border-t border-[var(--border-color)]">
+        <div className="flex items-center justify-between px-4 py-4 border-t border-[var(--glass-border)]">
           <p className="text-[10px] sm:text-xs" style={{ color: 'var(--text-muted)' }}>
             {page * LOG_PAGE_SIZE + 1}–{Math.min((page + 1) * LOG_PAGE_SIZE, logs.length)} dari {logs.length}
           </p>

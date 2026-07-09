@@ -20,7 +20,7 @@ export function ReportSummary({ summary, loading }: ReportSummaryProps) {
     return (
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="glass rounded-2xl p-4 sm:p-5 space-y-3">
+          <div key={i} className="glass-thick gradient-border rounded-3xl p-4 sm:p-5 space-y-3">
             <Skeleton variant="text" width={80} />
             <Skeleton variant="text" width={120} height={28} />
           </div>
@@ -45,7 +45,7 @@ export function ReportSummary({ summary, loading }: ReportSummaryProps) {
         return (
           <div
             key={card.label}
-            className={`glass rounded-2xl p-4 sm:p-5 hover-lift opacity-0 animate-fade-in-up stagger-${index + 1}`}
+            className={`glass-thick gradient-border rounded-3xl p-4 sm:p-5 hover-lift opacity-0 animate-fade-in-up stagger-${index + 1}`}
             style={{ animationFillMode: 'forwards' }}
           >
             <div className="flex items-center justify-between mb-3">
