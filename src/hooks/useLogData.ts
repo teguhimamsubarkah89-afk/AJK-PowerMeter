@@ -89,7 +89,21 @@ export function useLogData(
     try {
       const { start, end } = getDateRange(period, customRange);
       const data = await fetchLogs(activeDeviceId, start, end);
-      setLogs(data);
+      
+      // Filter data agar hanya mengambil 1 log setiap 30 menit
+      const THIRTY_MINUTES_MS = 30 * 60 * 1000;
+      const bucketedLogs = new Map<number, LogEntryWithKey>();
+      
+      for (const log of data) {
+        // Kelompokkan berdasarkan interval 30 menit (epoch)
+        const bucket = Math.floor(log.timestamp / THIRTY_MINUTES_MS) * THIRTY_MINUTES_MS;
+        // Ambil data pertama yang masuk di interval 30 menit tersebut
+        if (!bucketedLogs.has(bucket)) {
+          bucketedLogs.set(bucket, log);
+        }
+      }
+      
+      setLogs(Array.from(bucketedLogs.values()));
     } catch (err) {
       console.error('[useLogData] Error:', err);
       setError('Gagal memuat data riwayat.');
