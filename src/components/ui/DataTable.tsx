@@ -1,6 +1,7 @@
 // ============================================================
-// DataTable Component — AJK PowerMeter Dashboard
-// Tabel data dengan sorting, responsive scroll, alternating rows
+// DataTable Component — AJK PowerMeter Dashboard v2.0
+// Premium data table: sticky header, responsive scroll,
+// alternating rows, sort indicators, mobile card-view
 // ============================================================
 
 'use client';
@@ -15,6 +16,8 @@ export interface Column<T> {
   sortable?: boolean;
   className?: string;
   headerClassName?: string;
+  /** Hide on mobile (below sm breakpoint) */
+  hideOnMobile?: boolean;
 }
 
 interface DataTableProps<T> {
@@ -37,7 +40,7 @@ export function DataTable<T extends Record<string, unknown>>({
   emptyMessage = 'Belum ada data',
   emptyIcon,
   className = '',
-  stickyHeader = false,
+  stickyHeader = true,
   maxHeight,
 }: DataTableProps<T>) {
   const [sortKey, setSortKey] = useState<string | null>(null);
@@ -78,33 +81,58 @@ export function DataTable<T extends Record<string, unknown>>({
   }, [data, sortKey, sortDirection]);
 
   const getSortIcon = (key: string) => {
-    if (sortKey !== key) return <ChevronsUpDown className="w-3.5 h-3.5 opacity-40" />;
-    if (sortDirection === 'asc') return <ChevronUp className="w-3.5 h-3.5" />;
-    return <ChevronDown className="w-3.5 h-3.5" />;
+    if (sortKey !== key) return <ChevronsUpDown className="w-3.5 h-3.5 opacity-30" />;
+    if (sortDirection === 'asc') return <ChevronUp className="w-3.5 h-3.5 text-blue-400" />;
+    return <ChevronDown className="w-3.5 h-3.5 text-blue-400" />;
   };
 
+  // ── Empty State ────────────────────────────────────────
   if (data.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-16 text-[var(--text-muted)]">
-        {emptyIcon || <Database className="w-12 h-12 mb-3 opacity-30" />}
-        <p className="text-sm">{emptyMessage}</p>
+      <div
+        className="flex flex-col items-center justify-center py-16 rounded-xl"
+        style={{
+          background: 'var(--bg-card)',
+          border: '1px solid var(--glass-border)',
+        }}
+      >
+        <div className="w-14 h-14 rounded-2xl bg-white/[0.04] flex items-center justify-center mb-4">
+          {emptyIcon || <Database className="w-6 h-6 text-[var(--text-muted)] opacity-50" />}
+        </div>
+        <p className="text-sm font-medium text-[var(--text-muted)]">{emptyMessage}</p>
       </div>
     );
   }
 
+  // ── Table ──────────────────────────────────────────────
   return (
     <div
-      className={`overflow-x-auto rounded-xl border border-[var(--border-color)] ${className}`}
-      style={maxHeight ? { maxHeight, overflowY: 'auto' } : undefined}
+      className={`overflow-x-auto rounded-xl ${className}`}
+      style={{
+        border: '1px solid var(--glass-border)',
+        background: 'var(--bg-card)',
+        ...(maxHeight ? { maxHeight, overflowY: 'auto' } : {}),
+      }}
     >
       <table className="w-full text-sm">
-        <thead className={stickyHeader ? 'sticky top-0 z-10' : ''}>
-          <tr className="bg-[var(--bg-card)] border-b border-[var(--border-color)]">
+        <thead
+          className={stickyHeader ? 'sticky top-0 z-10' : ''}
+          style={{
+            background: 'rgba(255,255,255,0.02)',
+            backdropFilter: stickyHeader ? 'blur(12px)' : undefined,
+          }}
+        >
+          <tr
+            style={{
+              borderBottom: '1px solid var(--glass-border)',
+            }}
+          >
             {columns.map((col) => (
               <th
                 key={col.key}
-                className={`px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]
-                  ${col.sortable ? 'cursor-pointer select-none hover:text-[var(--text-secondary)] transition-colors' : ''}
+                className={`px-4 py-3 text-left text-[10px] sm:text-xs font-bold uppercase tracking-widest text-[var(--text-muted)]
+                  ${col.sortable ? 'cursor-pointer select-none hover:text-blue-400 transition-colors' : ''}
+                  ${col.hideOnMobile ? 'hidden sm:table-cell' : ''}
                   ${col.headerClassName || ''}`}
                 onClick={col.sortable ? () => handleSort(col.key) : undefined}
               >
@@ -120,13 +148,24 @@ export function DataTable<T extends Record<string, unknown>>({
           {sortedData.map((item, index) => (
             <tr
               key={keyExtractor(item)}
-              className={`border-b border-[var(--border-color)] transition-colors hover:bg-[var(--bg-card-hover)]
-                ${index % 2 === 0 ? 'bg-[var(--bg-secondary)]' : 'bg-[var(--bg-card)]'}`}
+              className="transition-colors duration-150 hover:bg-white/[0.03]"
+              style={{
+                borderBottom:
+                  index < sortedData.length - 1
+                    ? '1px solid rgba(255,255,255,0.04)'
+                    : undefined,
+                background:
+                  index % 2 === 0
+                    ? 'transparent'
+                    : 'rgba(255,255,255,0.015)',
+              }}
             >
               {columns.map((col) => (
                 <td
                   key={col.key}
-                  className={`px-4 py-3 text-[var(--text-primary)] whitespace-nowrap ${col.className || ''}`}
+                  className={`px-4 py-3 text-[var(--text-primary)] whitespace-nowrap text-xs sm:text-sm
+                    ${col.hideOnMobile ? 'hidden sm:table-cell' : ''}
+                    ${col.className || ''}`}
                 >
                   {col.render
                     ? col.render(item)

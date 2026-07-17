@@ -1,6 +1,6 @@
 // ============================================================
-// Dashboard Layout — AJK PowerMeter Dashboard
-// Auth guard + sidebar + topbar wrapper
+// Dashboard Layout — AJK PowerMeter Dashboard v2.0
+// Auth guard + Header + Sidebar + BottomNav wrapper
 // ============================================================
 
 'use client';
@@ -10,9 +10,10 @@ import { useRouter } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { TopBar } from '@/components/layout/TopBar';
-import { MobileNav } from '@/components/layout/MobileNav';
+import { BottomNav } from '@/components/layout/BottomNav';
 import { useAuth } from '@/hooks/useAuth';
 import { useAppStore } from '@/stores/useAppStore';
+import { NotificationProvider } from '@/components/layout/NotificationProvider';
 
 export default function DashboardLayout({
   children,
@@ -33,7 +34,7 @@ export default function DashboardLayout({
   // Show loading while checking auth
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[var(--bg-primary)]">
+      <div className="min-h-screen min-h-dvh flex items-center justify-center bg-[var(--bg-primary)]">
         <div className="text-center animate-fade-in">
           <Loader2 className="w-8 h-8 animate-spin text-blue-500 mx-auto mb-3" />
           <p className="text-sm text-[var(--text-muted)]">Memuat dashboard...</p>
@@ -46,29 +47,31 @@ export default function DashboardLayout({
   if (!user) return null;
 
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)] bg-grid-pattern">
-      {/* Sidebar (desktop only) */}
-      <Sidebar />
+    <NotificationProvider>
+      <div className="min-h-screen min-h-dvh bg-[var(--bg-primary)] bg-grid-pattern">
+        {/* Persistent Header */}
+        <TopBar />
 
-      {/* Mobile Nav Drawer */}
-      <MobileNav />
+        {/* Sidebar (desktop only) */}
+        <Sidebar />
 
-      {/* TopBar */}
-      <TopBar />
+        {/* Bottom Navigation (mobile/tablet only) */}
+        <BottomNav />
 
-      {/* Main Content */}
-      <main
-        className={`dashboard-main ${
-          sidebarCollapsed ? 'dashboard-main--collapsed' : 'dashboard-main--expanded'
-        }`}
-      >
-        <div className="dashboard-content">
-          {children}
-        </div>
-      </main>
+        {/* Main Content */}
+        <main
+          className={`dashboard-main ${
+            sidebarCollapsed ? 'dashboard-main--collapsed' : 'dashboard-main--expanded'
+          }`}
+        >
+          <div className="dashboard-content">
+            {children}
+          </div>
+        </main>
 
-      {/* Subtle radial gradient background */}
-      <div className="fixed inset-0 bg-gradient-radial pointer-events-none z-0" />
-    </div>
+        {/* Subtle radial gradient background */}
+        <div className="fixed inset-0 bg-gradient-radial pointer-events-none z-0" />
+      </div>
+    </NotificationProvider>
   );
 }

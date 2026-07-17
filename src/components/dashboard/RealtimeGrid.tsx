@@ -1,6 +1,6 @@
 // ============================================================
-// RealtimeGrid Component — AJK PowerMeter Dashboard
-// Grid layout 6 kartu metric: V, A, W, Wh, Hz, PF
+// RealtimeGrid Component — AJK PowerMeter Dashboard v2.0
+// Responsive grid layout for 6 metric cards
 // ============================================================
 
 'use client';
@@ -19,7 +19,7 @@ interface RealtimeGridProps {
 export function RealtimeGrid({ data, previousData, loading }: RealtimeGridProps) {
   if (loading) {
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-5">
         {Array.from({ length: 6 }).map((_, i) => (
           <MetricCardSkeleton key={i} />
         ))}
@@ -28,7 +28,7 @@ export function RealtimeGrid({ data, previousData, loading }: RealtimeGridProps)
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-5">
       {METRIC_CONFIGS.map((config, index) => (
         <MetricCard
           key={config.key}

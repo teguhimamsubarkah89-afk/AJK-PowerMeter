@@ -1,6 +1,6 @@
 // ============================================================
-// Halaman Pengaturan — AJK PowerMeter Dashboard
-// Tab: Info Perangkat | Manajemen User
+// Halaman Pengaturan — AJK PowerMeter Dashboard v2.0
+// Premium animated tab switcher
 // ============================================================
 
 'use client';
@@ -21,33 +21,62 @@ export default function PengaturanPage() {
   ];
 
   return (
-    <div className="space-y-6">
-      {/* Tab Navigation */}
-      <div className="glass rounded-2xl p-1.5 inline-flex gap-1 animate-fade-in">
-        {tabs.map((tab) => {
-          const Icon = tab.icon;
-          const isActive = activeTab === tab.key;
+    <div className="space-y-5 pb-6">
+      {/* Page Header */}
+      <div className="animate-fade-in-up stagger-1">
+        <div className="flex items-center gap-3 mb-1">
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(245,158,11,0.12)' }}>
+            <Settings className="w-4 h-4 text-amber-400" />
+          </div>
+          <h1 className="text-lg sm:text-xl font-bold text-[var(--text-primary)]">Pengaturan</h1>
+        </div>
+        <p className="text-xs sm:text-sm text-[var(--text-muted)] ml-11">
+          Kelola perangkat, konfigurasi dashboard, dan akun pengguna.
+        </p>
+      </div>
 
-          return (
-            <button
-              key={tab.key}
-              onClick={() => setActiveTab(tab.key)}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200
-                ${isActive
-                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/25'
-                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card-hover)]'
-                }`}
-            >
-              <Icon className="w-4 h-4" />
-              {tab.label}
-            </button>
-          );
-        })}
+      {/* Tab Navigation */}
+      <div className="animate-fade-in-up stagger-2">
+        <div
+          className="inline-flex gap-1 p-1 rounded-xl"
+          style={{ background: 'var(--bg-input)', border: '1px solid var(--border-color)' }}
+        >
+          {tabs.map((tab) => {
+            const Icon = tab.icon;
+            const isActive = activeTab === tab.key;
+
+            return (
+              <button
+                key={tab.key}
+                onClick={() => setActiveTab(tab.key)}
+                className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all duration-250 relative"
+                style={{
+                  minHeight: '40px',
+                  ...(isActive
+                    ? {
+                        background: 'linear-gradient(135deg, #3b82f6, #2563eb)',
+                        color: 'white',
+                        boxShadow: '0 4px 14px rgba(37, 99, 235, 0.35)',
+                      }
+                    : {
+                        color: 'var(--text-secondary)',
+                        background: 'transparent',
+                      }),
+                }}
+              >
+                <Icon className="w-4 h-4" />
+                {tab.label}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* Tab Content */}
-      {activeTab === 'device' && <DeviceInfoForm />}
-      {activeTab === 'user' && <UserManagement />}
+      <div className="animate-tab-slide" key={activeTab}>
+        {activeTab === 'device' && <DeviceInfoForm />}
+        {activeTab === 'user' && <UserManagement />}
+      </div>
     </div>
   );
 }

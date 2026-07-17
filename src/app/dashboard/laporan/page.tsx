@@ -1,11 +1,12 @@
 // ============================================================
-// Halaman Laporan — AJK PowerMeter Dashboard
+// Halaman Laporan — AJK PowerMeter Dashboard v2.0
 // Filter + ReportSummary + ReportChart + ExportButtons
 // ============================================================
 
 'use client';
 
 import { useState, useMemo } from 'react';
+import { FileText } from 'lucide-react';
 import { FilterBar } from '@/components/riwayat/FilterBar';
 import { ReportSummary } from '@/components/laporan/ReportSummary';
 import { ReportChart } from '@/components/laporan/ReportChart';
@@ -30,19 +31,36 @@ export default function LaporanPage() {
   }, [logs, tariffPerKwh]);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5 pb-6">
+      {/* Page Header */}
+      <div className="animate-fade-in-up stagger-1">
+        <div className="flex items-center gap-3 mb-1">
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(139,92,246,0.12)' }}>
+            <FileText className="w-4 h-4 text-violet-400" />
+          </div>
+          <h1 className="text-lg sm:text-xl font-bold text-[var(--text-primary)]">Laporan</h1>
+        </div>
+        <p className="text-xs sm:text-sm text-[var(--text-muted)] ml-11">
+          Ringkasan dan analisis konsumsi energi listrik.
+        </p>
+      </div>
+
       {/* Filter Bar */}
-      <FilterBar
-        activePeriod={period}
-        onPeriodChange={setPeriod}
-        customRange={customRange}
-        onCustomRangeChange={setCustomRange}
-        onRefresh={refetch}
-        loading={loading}
-      />
+      <div className="animate-fade-in-up stagger-2">
+        <FilterBar
+          activePeriod={period}
+          onPeriodChange={setPeriod}
+          customRange={customRange}
+          onCustomRangeChange={setCustomRange}
+          onRefresh={refetch}
+          loading={loading}
+        />
+      </div>
 
       {/* Summary Cards */}
-      <ReportSummary summary={summary} loading={loading} />
+      <div className="animate-fade-in-up stagger-3">
+        <ReportSummary summary={summary} loading={loading} />
+      </div>
 
       {/* Period Info */}
       {summary && !loading && (
@@ -53,13 +71,15 @@ export default function LaporanPage() {
       )}
 
       {/* Chart */}
-      <ReportChart logs={logs} loading={loading} />
+      <div className="animate-fade-in-up stagger-4">
+        <ReportChart logs={logs} loading={loading} />
+      </div>
 
-      {/* Export Buttons */}
-      <div className="glass rounded-2xl p-5 animate-fade-in">
+      {/* Export Section */}
+      <div className="glass-card p-5 animate-fade-in-up stagger-5">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h3 className="text-sm font-semibold text-[var(--text-primary)]">
+            <h3 className="text-sm font-bold text-[var(--text-primary)]">
               Unduh Laporan
             </h3>
             <p className="text-xs text-[var(--text-muted)] mt-0.5">

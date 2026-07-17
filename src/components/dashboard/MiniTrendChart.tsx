@@ -1,6 +1,6 @@
 // ============================================================
-// MiniTrendChart Component — AJK PowerMeter Dashboard
-// Line chart tren 30 menit terakhir (Recharts)
+// MiniTrendChart Component — AJK PowerMeter Dashboard v2.0
+// Premium area chart with touch-friendly metric selector
 // ============================================================
 
 'use client';
@@ -49,7 +49,7 @@ export function MiniTrendChart() {
 
   if (loading) {
     return (
-      <div className="glass-thick gradient-border rounded-3xl p-5 sm:p-7 animate-fade-in">
+      <div className="glass-card p-5 sm:p-7 animate-fade-in">
         <div className="flex items-center justify-between mb-4">
           <Skeleton variant="text" width={200} height={20} />
           <Skeleton variant="text" width={120} height={32} />
@@ -60,77 +60,114 @@ export function MiniTrendChart() {
   }
 
   return (
-    <div className="glass-thick gradient-border rounded-2xl p-5 sm:p-7 animate-fade-in relative z-0">
+    <div className="glass-card p-5 sm:p-7 animate-fade-in relative overflow-hidden">
+      {/* Decorative accent */}
+      <div
+        className="absolute top-0 left-0 right-0 h-[2px] opacity-40"
+        style={{ background: `linear-gradient(90deg, transparent, ${chartColor}, transparent)` }}
+      />
+
       {/* Header */}
-      <div className="mb-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
+      <div className="mb-5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
           <div>
-            <h3 className="text-base font-semibold text-[var(--text-primary)]">
+            <h3 className="text-base sm:text-lg font-bold text-[var(--text-primary)]">
               Tren 30 Menit Terakhir
             </h3>
-            <p className="text-xs text-[var(--text-muted)] mt-0.5">
+            <p className="text-xs font-medium text-[var(--text-muted)] mt-1">
               {logs.length} titik data · auto-refresh setiap menit
             </p>
           </div>
         </div>
 
-        {/* Metric Selector — scrollable horizontal on mobile */}
-        <div className="flex gap-1.5 overflow-x-auto pb-1 -mx-1 px-1 scrollbar-hide">
-          {METRIC_CONFIGS.map((m) => (
-            <button
-              key={m.key}
-              onClick={() => setSelectedMetric(m.key)}
-              className="px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all duration-200 flex-shrink-0"
-              style={
-                selectedMetric === m.key
-                  ? { backgroundColor: CHART_COLORS[m.key], color: 'white', boxShadow: `0 2px 8px ${CHART_COLORS[m.key]}40` }
-                  : { color: 'var(--text-muted)', background: 'var(--bg-card)', border: '1px solid var(--border-color)' }
-              }
-            >
-              {m.label}
-            </button>
-          ))}
+        {/* Metric Selector — scrollable, touch-friendly */}
+        <div className="flex gap-2 overflow-x-auto pb-2 -mx-2 px-2 scrollbar-hide">
+          {METRIC_CONFIGS.map((m) => {
+            const isActive = selectedMetric === m.key;
+            return (
+              <button
+                key={m.key}
+                onClick={() => setSelectedMetric(m.key)}
+                className="px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all duration-300 flex-shrink-0 relative overflow-hidden"
+                style={{
+                  minHeight: '36px',
+                  ...(isActive
+                    ? {
+                        backgroundColor: CHART_COLORS[m.key],
+                        color: 'white',
+                        boxShadow: `0 4px 16px ${CHART_COLORS[m.key]}50`,
+                        transform: 'translateY(-1px)',
+                      }
+                    : {
+                        color: 'var(--text-secondary)',
+                        background: 'var(--bg-input)',
+                        border: '1px solid var(--border-color)',
+                      }),
+                }}
+              >
+                {m.label}
+              </button>
+            );
+          })}
         </div>
       </div>
 
       {/* Chart */}
       {chartData.length === 0 ? (
-        <div className="flex items-center justify-center h-[200px] text-sm text-[var(--text-muted)]">
+        <div className="flex items-center justify-center h-[220px] text-sm font-medium text-[var(--text-muted)] rounded-xl border border-[var(--border-color)] bg-white/[0.02]">
           Belum ada data log. Data akan muncul setelah 30 menit.
         </div>
       ) : (
-        <div className="w-full" style={{ height: 'clamp(180px, 30vw, 250px)' }}>
+        <div className="w-full mt-2" style={{ height: 'clamp(200px, 30vw, 300px)' }}>
           <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={chartData} margin={{ top: 5, right: 5, bottom: 5, left: -10 }}>
+            <AreaChart data={chartData} margin={{ top: 10, right: 10, bottom: 0, left: -15 }}>
               <defs>
                 <linearGradient id={`gradient-${selectedMetric}`} x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor={chartColor} stopOpacity={0.3} />
+                  <stop offset="5%" stopColor={chartColor} stopOpacity={0.35} />
                   <stop offset="95%" stopColor={chartColor} stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <CartesianGrid vertical={false} stroke="var(--glass-border)" strokeOpacity={0.5} strokeDasharray="4 4" />
+              <CartesianGrid
+                vertical={false}
+                stroke="var(--glass-border)"
+                strokeOpacity={0.5}
+                strokeDasharray="6 6"
+              />
               <XAxis
                 dataKey="timeLabel"
-                tick={{ fontSize: 10, fill: 'var(--text-muted)' }}
-                axisLine={false} tickLine={false}
+                tick={{ fontSize: 11, fill: 'var(--text-muted)', fontWeight: 500 }}
+                axisLine={false}
+                tickLine={false}
                 interval="preserveStartEnd"
+                dy={10}
               />
               <YAxis
-                tick={{ fontSize: 10, fill: 'var(--text-muted)' }}
-                axisLine={false} tickLine={false}
-                width={45}
+                tick={{ fontSize: 11, fill: 'var(--text-muted)', fontWeight: 500 }}
+                axisLine={false}
+                tickLine={false}
+                width={50}
+                dx={-10}
               />
               <Tooltip
                 contentStyle={{
-                  background: 'rgba(17, 24, 39, 0.85)',
-                  backdropFilter: 'blur(16px)',
+                  background: 'rgba(10, 15, 30, 0.92)',
+                  backdropFilter: 'blur(20px)',
                   border: '1px solid rgba(255, 255, 255, 0.1)',
-                  borderRadius: '16px',
-                  boxShadow: '0 20px 40px -10px rgba(0,0,0,0.5)',
-                  fontSize: '12px',
-                  fontWeight: '600',
+                  borderRadius: '12px',
+                  boxShadow: '0 20px 40px -10px rgba(0,0,0,0.6)',
                   color: 'white',
                   padding: '12px 16px',
+                }}
+                itemStyle={{
+                  fontWeight: 700,
+                  fontSize: '14px',
+                  marginTop: '4px',
+                }}
+                labelStyle={{
+                  color: 'var(--text-muted)',
+                  fontSize: '12px',
+                  fontWeight: 500,
+                  marginBottom: '4px',
                 }}
                 labelFormatter={(label) => `Waktu: ${label}`}
                 formatter={(val) => {
@@ -145,10 +182,16 @@ export function MiniTrendChart() {
                 type="monotone"
                 dataKey="value"
                 stroke={chartColor}
-                strokeWidth={2}
+                strokeWidth={2.5}
                 fill={`url(#gradient-${selectedMetric})`}
                 dot={false}
-                activeDot={{ r: 4, strokeWidth: 0, fill: chartColor }}
+                activeDot={{
+                  r: 5,
+                  strokeWidth: 2,
+                  stroke: '#fff',
+                  fill: chartColor,
+                  style: { filter: `drop-shadow(0 0 4px ${chartColor})` },
+                }}
               />
             </AreaChart>
           </ResponsiveContainer>

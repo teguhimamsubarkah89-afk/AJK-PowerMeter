@@ -1,12 +1,12 @@
 // ============================================================
-// ExportButtons Component — AJK PowerMeter Dashboard
-// Tombol Export Excel + PDF dengan loading state
+// ExportButtons Component — AJK PowerMeter Dashboard v2.0
+// Premium export buttons with icon + loading state
 // ============================================================
 
 'use client';
 
 import { useState } from 'react';
-import { FileSpreadsheet, FileText, Loader2 } from 'lucide-react';
+import { FileSpreadsheet, FileText, Loader2, Download } from 'lucide-react';
 import { exportToExcel, exportToPDF } from '@/lib/utils/export';
 import toast from 'react-hot-toast';
 import type { LogEntryWithKey, ReportSummary } from '@/types';
@@ -52,16 +52,20 @@ export function ExportButtons({ logs, summary, disabled }: ExportButtonsProps) {
   };
 
   return (
-    <div className="flex flex-wrap gap-3">
+    <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
       {/* Excel */}
       <button
         onClick={handleExportExcel}
         disabled={isDisabled || exportingExcel}
-        className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold
-          bg-emerald-600/15 text-emerald-400 border border-emerald-500/20
-          hover:bg-emerald-600/25 hover:border-emerald-500/30
-          disabled:opacity-40 disabled:cursor-not-allowed
-          transition-all duration-200"
+        className="flex items-center justify-center gap-2.5 px-5 py-3 rounded-xl text-sm font-bold
+          transition-all duration-200 hover:translate-y-[-1px] active:translate-y-0
+          disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+        style={{
+          minHeight: '44px',
+          background: 'rgba(16, 185, 129, 0.1)',
+          color: '#34d399',
+          border: '1px solid rgba(16, 185, 129, 0.2)',
+        }}
       >
         {exportingExcel ? (
           <Loader2 className="w-4 h-4 animate-spin" />
@@ -69,17 +73,22 @@ export function ExportButtons({ logs, summary, disabled }: ExportButtonsProps) {
           <FileSpreadsheet className="w-4 h-4" />
         )}
         Export Excel
+        <Download className="w-3.5 h-3.5 opacity-50" />
       </button>
 
       {/* PDF */}
       <button
         onClick={handleExportPDF}
         disabled={isDisabled || exportingPDF}
-        className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold
-          bg-red-600/15 text-red-400 border border-red-500/20
-          hover:bg-red-600/25 hover:border-red-500/30
-          disabled:opacity-40 disabled:cursor-not-allowed
-          transition-all duration-200"
+        className="flex items-center justify-center gap-2.5 px-5 py-3 rounded-xl text-sm font-bold
+          transition-all duration-200 hover:translate-y-[-1px] active:translate-y-0
+          disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+        style={{
+          minHeight: '44px',
+          background: 'rgba(239, 68, 68, 0.1)',
+          color: '#f87171',
+          border: '1px solid rgba(239, 68, 68, 0.2)',
+        }}
       >
         {exportingPDF ? (
           <Loader2 className="w-4 h-4 animate-spin" />
@@ -87,6 +96,7 @@ export function ExportButtons({ logs, summary, disabled }: ExportButtonsProps) {
           <FileText className="w-4 h-4" />
         )}
         Export PDF
+        <Download className="w-3.5 h-3.5 opacity-50" />
       </button>
     </div>
   );

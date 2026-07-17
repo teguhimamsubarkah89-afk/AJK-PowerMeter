@@ -1,6 +1,6 @@
 // ============================================================
-// HistoryChart Component — AJK PowerMeter Dashboard
-// Full history line chart with multi-series toggle
+// HistoryChart Component — AJK PowerMeter Dashboard v2.0
+// Multi-metric line chart with premium styling
 // ============================================================
 
 'use client';
@@ -45,7 +45,7 @@ export function HistoryChart({ logs, loading }: HistoryChartProps) {
 
   if (loading) {
     return (
-      <div className="glass-thick gradient-border rounded-3xl p-4 sm:p-6">
+      <div className="glass-card p-4 sm:p-6">
         <div className="animate-shimmer h-[280px] rounded-xl" style={{ background: 'var(--bg-card-hover)' }} />
       </div>
     );
@@ -54,14 +54,20 @@ export function HistoryChart({ logs, loading }: HistoryChartProps) {
   if (logs.length === 0) return null;
 
   return (
-    <div className="glass-thick gradient-border rounded-3xl p-4 sm:p-6 animate-fade-in">
+    <div className="glass-card p-4 sm:p-6 animate-fade-in relative overflow-hidden">
+      {/* Top accent */}
+      <div
+        className="absolute top-0 left-0 right-0 h-[2px] opacity-40"
+        style={{ background: 'linear-gradient(90deg, transparent, #3b82f6, #8b5cf6, transparent)' }}
+      />
+
       {/* Header */}
       <div className="mb-4">
-        <h3 className="text-base font-semibold text-[var(--text-primary)] mb-3">
+        <h3 className="text-base font-bold text-[var(--text-primary)] mb-3">
           Grafik Riwayat
         </h3>
 
-        {/* Metric Toggle — scrollable */}
+        {/* Metric Toggle — scrollable, touch-friendly */}
         <div className="flex gap-1.5 overflow-x-auto pb-1 -mx-0.5 px-0.5 scrollbar-hide">
           {METRIC_CONFIGS.map((m) => {
             const isActive = activeMetrics.includes(m.key);
@@ -69,12 +75,13 @@ export function HistoryChart({ logs, loading }: HistoryChartProps) {
               <button
                 key={m.key}
                 onClick={() => toggleMetric(m.key)}
-                className="px-2.5 py-1 rounded-lg text-xs font-semibold whitespace-nowrap flex-shrink-0 transition-all duration-200"
-                style={
-                  isActive
+                className="px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap flex-shrink-0 transition-all duration-200"
+                style={{
+                  minHeight: '32px',
+                  ...(isActive
                     ? { backgroundColor: CHART_COLORS[m.key], color: 'white', border: '1px solid transparent' }
-                    : { color: 'var(--text-muted)', background: 'transparent', border: '1px solid var(--border-color)' }
-                }
+                    : { color: 'var(--text-muted)', background: 'transparent', border: '1px solid var(--border-color)' }),
+                }}
               >
                 {m.label}
               </button>
@@ -101,12 +108,14 @@ export function HistoryChart({ logs, loading }: HistoryChartProps) {
             />
             <Tooltip
               contentStyle={{
-                background: 'var(--bg-card)',
-                border: '1px solid var(--border-color)',
+                background: 'rgba(10, 15, 30, 0.92)',
+                backdropFilter: 'blur(20px)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
                 borderRadius: '12px',
                 fontSize: '12px',
                 color: 'var(--text-primary)',
-                padding: '8px 12px',
+                padding: '10px 14px',
+                boxShadow: '0 16px 40px -8px rgba(0,0,0,0.5)',
               }}
               labelFormatter={(label) => `Waktu: ${label}`}
               formatter={(val, name) => {
@@ -130,7 +139,7 @@ export function HistoryChart({ logs, loading }: HistoryChartProps) {
             {chartData.length > 50 && (
               <Brush
                 dataKey="timeLabel" height={25}
-                stroke="var(--border-color)" fill="var(--bg-card)"
+                stroke="var(--border-color)" fill="var(--bg-card-solid)"
                 travellerWidth={8}
               />
             )}

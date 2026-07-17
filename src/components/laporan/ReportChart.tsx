@@ -1,6 +1,6 @@
 // ============================================================
-// ReportChart Component — AJK PowerMeter Dashboard
-// Bar chart konsumsi energi harian/bulanan + line overlay
+// ReportChart Component — AJK PowerMeter Dashboard v2.0
+// Premium bar chart + line overlay for energy consumption
 // ============================================================
 
 'use client';
@@ -32,7 +32,7 @@ export function ReportChart({ logs, loading }: ReportChartProps) {
 
   if (loading) {
     return (
-      <div className="glass-thick gradient-border rounded-3xl p-4 sm:p-6">
+      <div className="glass-card p-4 sm:p-6">
         <Skeleton variant="text" width={200} height={20} className="mb-4" />
         <Skeleton variant="rectangular" height={250} />
       </div>
@@ -42,10 +42,16 @@ export function ReportChart({ logs, loading }: ReportChartProps) {
   if (chartData.length === 0) return null;
 
   return (
-    <div className="glass-thick gradient-border rounded-3xl p-4 sm:p-6 animate-fade-in relative z-0">
+    <div className="glass-card p-4 sm:p-6 animate-fade-in relative overflow-hidden">
+      {/* Top accent */}
+      <div
+        className="absolute top-0 left-0 right-0 h-[2px] opacity-40"
+        style={{ background: 'linear-gradient(90deg, transparent, #8b5cf6, #10b981, transparent)' }}
+      />
+
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
-        <h3 className="text-base font-semibold" style={{ color: 'var(--text-primary)' }}>
+        <h3 className="text-base font-bold text-[var(--text-primary)]">
           Grafik Konsumsi Energi
         </h3>
         <div className="flex gap-1.5">
@@ -53,12 +59,13 @@ export function ReportChart({ logs, loading }: ReportChartProps) {
             <button
               key={m}
               onClick={() => setMode(m)}
-              className="px-3 py-1.5 rounded-lg text-sm font-medium capitalize transition-all duration-200"
-              style={
-                mode === m
-                  ? { background: '#2563eb', color: 'white', boxShadow: '0 2px 10px rgba(37, 99, 235, 0.3)' }
-                  : { color: 'var(--text-secondary)', background: 'var(--bg-card)', border: '1px solid var(--border-color)' }
-              }
+              className="px-3.5 py-2 rounded-xl text-sm font-semibold capitalize transition-all duration-200"
+              style={{
+                minHeight: '36px',
+                ...(mode === m
+                  ? { background: 'linear-gradient(135deg, #3b82f6, #2563eb)', color: 'white', boxShadow: '0 4px 14px rgba(37, 99, 235, 0.3)' }
+                  : { color: 'var(--text-secondary)', background: 'var(--bg-input)', border: '1px solid var(--border-color)' }),
+              }}
             >
               {m}
             </button>
@@ -90,12 +97,14 @@ export function ReportChart({ logs, loading }: ReportChartProps) {
             />
             <Tooltip
               contentStyle={{
-                background: 'var(--bg-card)',
-                border: '1px solid var(--border-color)',
+                background: 'rgba(10, 15, 30, 0.92)',
+                backdropFilter: 'blur(20px)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
                 borderRadius: '12px',
                 fontSize: '12px',
                 color: 'var(--text-primary)',
-                padding: '8px 12px',
+                padding: '10px 14px',
+                boxShadow: '0 16px 40px -8px rgba(0,0,0,0.5)',
               }}
               formatter={(val, name) => {
                 const numVal = Number(val ?? 0);

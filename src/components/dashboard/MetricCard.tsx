@@ -1,6 +1,6 @@
 // ============================================================
-// MetricCard Component — AJK PowerMeter Dashboard
-// Kartu individual untuk setiap metric (V, A, W, dll)
+// MetricCard Component — AJK PowerMeter Dashboard v2.0
+// Premium glass card with animated counter, trend, and accent glow
 // ============================================================
 
 'use client';
@@ -31,21 +31,51 @@ export function MetricCard({
   label, value, previousValue, unit, iconName, color, decimals, metricKey, staggerIndex = 0,
 }: MetricCardProps) {
   const Icon = iconMap[iconName] || Zap;
-  const [isAnimating, setIsAnimating] = useState(false);
-  const prevValueRef = useRef<number | null>(null);
 
-  const displayValue = value === null || value === undefined ? '--' : formatMetricValue(value, metricKey, decimals);
+  // State for animated value
+  const [displayValue, setDisplayValue] = useState<number | null>(value);
+  const prevTargetRef = useRef<number | null>(value);
 
+  // Smooth number transition
   useEffect(() => {
-    // Trigger a short animation when value changes
-    if (prevValueRef.current !== null && prevValueRef.current !== value) {
-      setIsAnimating(true);
-      const timer = setTimeout(() => setIsAnimating(false), 300);
-      prevValueRef.current = value;
-      return () => clearTimeout(timer);
+    if (value === null) {
+      setDisplayValue(null);
+      prevTargetRef.current = null;
+      return;
     }
-    prevValueRef.current = value;
+
+    if (prevTargetRef.current === null) {
+      setDisplayValue(value);
+      prevTargetRef.current = value;
+      return;
+    }
+
+    if (prevTargetRef.current === value) return;
+
+    const startValue = displayValue !== null ? displayValue : value;
+    const endValue = value;
+    const duration = 500;
+    let startTime: number | null = null;
+
+    const step = (timestamp: number) => {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+      const ease = 1 - Math.pow(1 - progress, 4);
+      const current = startValue + (endValue - startValue) * ease;
+      setDisplayValue(current);
+
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      } else {
+        setDisplayValue(endValue);
+      }
+    };
+
+    requestAnimationFrame(step);
+    prevTargetRef.current = value;
   }, [value]);
+
+  const formattedDisplayValue = displayValue === null ? '--' : formatMetricValue(displayValue, metricKey, decimals);
 
   const getTrend = () => {
     if (value === null || previousValue === null || previousValue === undefined) return 'neutral';
@@ -69,58 +99,67 @@ export function MetricCard({
 
   return (
     <div
-      className={`glass-thick gradient-border p-6 hover-lift animate-fade-in-up stagger-${staggerIndex + 1} min-w-0 relative overflow-hidden group`}
+      className={`relative overflow-hidden rounded-[var(--radius-card)] p-5 sm:p-6 hover-lift animate-fade-in-up stagger-${staggerIndex + 1} min-w-0 group cursor-default`}
       style={{
         animationFillMode: 'forwards',
+        background: 'var(--bg-card)',
+        border: '1px solid var(--glass-border)',
+        boxShadow: '0 4px 24px -8px rgba(0,0,0,0.3)',
       }}
       role="group"
       aria-label={`${label} metric card`}
     >
-      {/* Background Glow */}
-      <div 
-        className="absolute -inset-1 opacity-20 group-hover:opacity-40 blur-2xl transition-opacity duration-500 pointer-events-none"
-        style={{ background: `radial-gradient(circle at 50% 0%, ${accentColor}, transparent 70%)` }}
+      {/* Top accent line */}
+      <div
+        className="absolute top-0 left-0 right-0 h-[2px] opacity-60 group-hover:opacity-100 transition-opacity duration-500"
+        style={{ background: `linear-gradient(90deg, transparent, ${accentColor}, transparent)` }}
       />
 
-      {/* Header */}
-      <div className="flex items-center justify-between mb-5 relative z-10">
-        <span className="text-xs font-bold text-[var(--text-muted)] tracking-widest uppercase">
+      {/* Background glow on hover */}
+      <div
+        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
+        style={{
+          background: `radial-gradient(ellipse at 50% 120%, ${accentColor}12, transparent 70%)`,
+        }}
+      />
+
+      {/* Header: Label + Icon */}
+      <div className="flex items-start justify-between mb-4 relative z-10">
+        <span className="text-[11px] sm:text-xs font-bold text-[var(--text-muted)] tracking-widest uppercase mt-1">
           {label}
         </span>
         <div
-          className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-          style={{ backgroundColor: `${accentColor}18` }}
+          className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg"
+          style={{
+            backgroundColor: `${accentColor}15`,
+            boxShadow: `0 0 0 rgba(0,0,0,0)`,
+          }}
         >
-          <Icon className="w-5 h-5" style={{ color: accentColor }} />
+          <Icon className="w-[18px] h-[18px]" style={{ color: accentColor }} />
         </div>
       </div>
 
       {/* Value */}
-      <div className="flex items-baseline gap-2 mb-3 relative z-10">
+      <div className="flex items-baseline gap-1.5 mb-4 relative z-10">
         <span
-          className={`text-4xl lg:text-5xl font-black tracking-tighter text-white tabular-nums drop-shadow-md ${isAnimating ? 'animate-count-up' : ''}`}
+          className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[var(--text-primary)] tabular-nums leading-none"
           aria-live="polite"
         >
-          {displayValue}
+          {formattedDisplayValue}
         </span>
-        <span className="text-sm lg:text-base font-bold text-[var(--text-secondary)]">
+        <span className="text-sm font-semibold text-[var(--text-muted)]">
           {unit}
         </span>
       </div>
 
       {/* Trend */}
-      <div className="flex items-center gap-2 text-xs font-bold relative z-10" style={{ color: trendConfig[trend].color }}>
-        <div className="p-1 rounded-full bg-white/5">
-          {trendConfig[trend].icon}
-        </div>
+      <div
+        className="flex items-center gap-1.5 text-xs font-semibold relative z-10"
+        style={{ color: trendConfig[trend].color }}
+      >
+        {trendConfig[trend].icon}
         <span className="tracking-wide">{trendConfig[trend].label}</span>
       </div>
-
-      {/* Accent line bottom */}
-      <div
-        className="absolute bottom-0 left-0 right-0 h-[2px] opacity-50 group-hover:opacity-100 transition-opacity"
-        style={{ background: `linear-gradient(90deg, transparent, ${accentColor}, transparent)` }}
-      />
     </div>
   );
 }
